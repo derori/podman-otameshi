@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0.27
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    restart: always
+    volumes:
+      - ./db_store:/var/lib/mysql
+    networks:
+      - lnet
+
+  backend:
+    build: ./backend
+    ports:
+      - 4000:4000
+    environment:
+      PORT: 4000
+    networks:
+      - lnet
+
+  frontend:
+    build: ./frontend
+    ports:
+      - 4200:4200
+    networks:
+      - lnet
+
+networks:
+  lnet:
+    driver: bridge
